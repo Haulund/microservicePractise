@@ -1,11 +1,10 @@
 package com.tcs.practise.employeeapp.models;
 
-import com.tcs.practise.employeeapp.EmployeeAppApplication;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,8 +24,11 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @NotNull
     private String name;
+    @NotNull
     private String department;
+    @NotNull
     private int age;
 
     public Employee (String name, String department, int age) {

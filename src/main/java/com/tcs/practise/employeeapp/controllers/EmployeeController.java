@@ -3,6 +3,9 @@ package com.tcs.practise.employeeapp.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tcs.practise.employeeapp.models.Employee;
-import com.tcs.practise.employeeapp.services.EmployeeService;
+import com.tcs.practise.employeeapp.services.EmployeeServiceImpl;
 
 /**
  * EmployeeController
@@ -20,7 +23,7 @@ import com.tcs.practise.employeeapp.services.EmployeeService;
 @RestController
 public class EmployeeController {
     @Autowired
-    EmployeeService employeeService;
+    EmployeeServiceImpl employeeService;
 
     @GetMapping("/api/employee")
     public List<Employee> readAll() {
@@ -38,8 +41,12 @@ public class EmployeeController {
     }
 
     @PutMapping("/api/employee")
-    public Employee updateEmployee(@RequestBody Employee emp){
-        return employeeService.update(emp);
+    public ResponseEntity<?> updateEmployee(@RequestBody Employee emp){
+        Employee updated = employeeService.update(emp);
+        if (updated == null) {
+            return new ResponseEntity<>("wrong employee ID", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
     @DeleteMapping("/api/employee/{employeeId}")
