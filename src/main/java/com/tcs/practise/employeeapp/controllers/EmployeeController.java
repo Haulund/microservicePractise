@@ -3,10 +3,8 @@ package com.tcs.practise.employeeapp.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,23 +42,16 @@ public class EmployeeController {
 
     @PutMapping("/api/employee")
     public ResponseEntity<?> updateEmployee(@RequestBody Employee emp) {
-         try {
-            Employee updated = employeeService.update(emp);
-            if (updated == null) {
-                return new ResponseEntity<>("wrong employee ID", HttpStatus.BAD_REQUEST);
-            }
-            return new ResponseEntity<>(updated, HttpStatus.OK);
-        } catch (TransactionSystemException e) {
-            throw new TransactionSystemException("Fields cannot be null"); 
-        } catch (HttpMessageNotReadableException e) {
-            throw new HttpMessageNotReadableException("Request needs a body", e.getHttpInputMessage());
+        if (
+            Integer.valueOf(emp.getAge()) == null || 
+            emp.getDepartment() == null || 
+            emp.getName() == null || 
+            Integer.valueOf(emp.getId()) == null
+            ) {
+                throw new TransactionSystemException("any of the fields cannot be Null");
         }
-
-        //Employee updated = employeeService.update(emp);
-       /* if (updated == null) {
-            return new ResponseEntity<>("wrong employee ID", HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(updated, HttpStatus.OK); */
+        Employee updated = employeeService.update(emp);
+        return new ResponseEntity<>(updated, HttpStatus.OK); 
     }
 
     @DeleteMapping("/api/employee/{employeeId}")
