@@ -30,9 +30,7 @@ public class EmployeeHateaosController{
         empList.forEach(e -> {
             Link selfLink = WebMvcLinkBuilder.linkTo(this.getClass()).slash(e.getEmployeeId()).withSelfRel();
             e.add(selfLink);
-        });
-
-        empList.forEach(e -> {
+        
             Link linkToCollection = WebMvcLinkBuilder.linkTo(
                 WebMvcLinkBuilder.methodOn(TaskHateaosController.class).getAllTasks(e.getEmployeeId())
             ).withRel("All-tasks");
