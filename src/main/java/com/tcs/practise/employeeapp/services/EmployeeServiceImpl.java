@@ -18,7 +18,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     public Employee update(Employee emp) {
-        if (employeeRepository.findById(emp.getId()).isPresent()){
+        if (employeeRepository.findById(emp.getEmployeeId()).isPresent()){
             return employeeRepository.save(emp);
         }
         return null;
